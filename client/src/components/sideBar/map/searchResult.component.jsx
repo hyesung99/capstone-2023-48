@@ -2,8 +2,8 @@ import './searchResult.style.scss';
 import { addPlace } from '../../../action/plan-action';
 import { ProjectContext } from '../../../contexts/project.context';
 import { useContext, useState, useRef, useEffect } from 'react';
-import TimePicker from 'react-time-picker';
 import DatePicker from "react-datepicker";
+
 
 const SearchResult = (props) =>{
 
@@ -15,13 +15,23 @@ const SearchResult = (props) =>{
   const [ placeDate, setPlaceDate ] = useState(new Date());
   const [ startAt, setStartAt ] = useState('10:00');
   const [ endAt, setEndAt ] = useState('10:00');
+  const [showTimeOptions, setShowTimeOptions] = useState(false);
   const slideRef = useRef(null);
   const TOTAL_SLIDES = result.photos ? result.photos.length-1 : 0;
   const minDate = currentProject.startAt;
   const maxDate = currentProject.endAt;
+
+
+  const handleInputClick = () => {
+    setShowTimeOptions(true);
+  };
+
+  const handleTimeOptionClick = (time) => {
+    setStartAt(time);
+    setShowTimeOptions(false);
+  };
   
   //translate when next/prev button clicked
-  console.log(result.photos[1].getUrl());
   //currentSlide가 바뀌면 해당 slide로 translate
   useEffect(() => {
     if(slideRef.current){
@@ -86,6 +96,14 @@ const SearchResult = (props) =>{
     }
   }
 
+  const timeOptions = [];
+  for (let hour = 0; hour < 24; hour++) {
+    for (let minute = 0; minute < 60; minute += 30) {
+      const time = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+      timeOptions.push(time);
+    }
+  }
+
   return(
     <div className='result-wrapper'>
       {toggleImgList && 
@@ -137,20 +155,24 @@ const SearchResult = (props) =>{
             minDate={minDate}
             maxDate={maxDate}
           />
-          <label>시작시간</label>
-          <TimePicker className='react-time-picker' 
-            onChange={setStartAt} 
+
+          <input
+            type="text"
             value={startAt}
-            clockIcon={null}
-            clearIcon={null}
-            />
-          <label>종료시간</label>
-          <TimePicker className='react-time-picker' 
-            onChange={setEndAt} 
-            value={endAt}
-            clockIcon={null}
-            clearIcon={null}
+            onClick={handleInputClick}
           />
+          {showTimeOptions && 
+          <div className='result-time-option-container'>
+            {timeOptions.map((time) => {
+              return(
+                <div 
+                  className='result-time-oprion'
+                  onClick={() => handleTimeOptionClick(time)}  
+                >{time}</div>
+              )
+            })}
+          </div>}
+          
           
         </div>
         <div className='result-add-btn-wrapper'>

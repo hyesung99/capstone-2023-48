@@ -24,9 +24,8 @@ const Map = (props) =>{
     lng: 127.075017
   })
 
-  console.log(result);
-
   const  handlePlacesChange = () => {
+    console.log(searchBoxRef.current.getPlaces());
     if(searchBoxRef.current && searchBoxRef.current.getPlaces()){
       const places = searchBoxRef.current.getPlaces();
       const place = places[0];
@@ -34,6 +33,12 @@ const Map = (props) =>{
         setresult(place);
         setCenter(place.geometry.location)
       }
+    }
+  }
+
+  const onKeyDown = (e) => {
+    if(e.key='Enter'){
+      console.log('enter');
     }
   }
   
@@ -55,10 +60,11 @@ const Map = (props) =>{
               searchBoxRef.current = searchBox;
             }}
             onPlacesChanged={handlePlacesChange}
-          >   
+            >   
             <input
               type="text"
               placeholder="search"
+              onKeyDown={onKeyDown}        
               style={{
                 boxSizing: `border-box`,
                 border: `1px solid transparent`,

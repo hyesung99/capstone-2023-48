@@ -115,6 +115,8 @@
         font-size: 15px;
         margin: 10px;
       }
+
+      
     }
     
     .result-add-btn-wrapper{
@@ -132,8 +134,19 @@
     }
   }
 }
+.result-time-option-container{
+  display: flex;
+  flex-direction: column;
+  width:100%;
+  height: 150px;
+  overflow: scroll;
+}
+
+.result-time-option{
+  background-color: palegoldenrod;
+}
 .react-time-picker-wrapper{
-  width:150px;
+  width:fit-content;
   display: flex;
   flex-direction: column  ;
 }
